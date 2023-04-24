@@ -2,3 +2,5 @@
 data/train_data.zip
 #Data train
 vietnamese_hcr/raw/data/*
+#model
+model_checkpoint_weights.hdf5

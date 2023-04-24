@@ -15,7 +15,7 @@ img = np.expand_dims(img , axis = 2)
 img = img/255
 
 
-model.load_weights('model_checkpoint_weights.hdf5')
+model.load_weights('model_weights.hdf5')
 # Đưa ảnh qua mô hình để đưa ra dự đoán về các ký tự trong ảnh
 predictions = model.predict(img)
 
