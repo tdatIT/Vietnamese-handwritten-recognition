@@ -22,7 +22,6 @@ st.header("Kết quả")
 st.markdown("##")
 result_container = st.empty()
 result_container.code("st.code")
-st.button("Copy")
 
 # Sidebar
 with st.sidebar:
