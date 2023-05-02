@@ -1,4 +1,3 @@
-
 import streamlit as st
 import numpy as np
 import cv2
@@ -35,7 +34,8 @@ if IMAGE_UPLOAD is not None:
 st.markdown('<div style="margin-top:3rem"></div>', unsafe_allow_html=True)
 st.header("Ảnh đã xử lý")
 processed_image_container = st.empty()
-processed_image_container.markdown('<div style="margin-top:5rem"></div>', unsafe_allow_html=True)
+processed_image_container.markdown(
+    '<div style="margin-top:5rem"></div>', unsafe_allow_html=True)
 st.markdown('<div style="margin-top:2rem"></div>', unsafe_allow_html=True)
 st.header("Kết quả")
 st.markdown('<div style="margin-top:1rem"></div>', unsafe_allow_html=True)
@@ -73,7 +73,7 @@ with st.sidebar:
             MODEL_INPUT = dip.process_image(OPENCV_IMAGE)
             processed_image_container.image(MODEL_INPUT)
             # Dự đoán chuỗi
-            MODEL_INPUT =  dip.convert_img_to_input(MODEL_INPUT)
+            MODEL_INPUT = dip.convert_img_to_input(MODEL_INPUT)
             PREDICTION_STR = ocr.prediction_ocr(MODEL_INPUT)
             # Đưa chuổi dự đoán vào khung kết quả
             result_container.code(PREDICTION_STR)

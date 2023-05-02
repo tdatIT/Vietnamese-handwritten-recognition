@@ -14,35 +14,39 @@ import module.process_image as process_image
 import module.vietnamese_ocr as vietnamese_ocr
 import module.vietocr_module as vietocr_module
 
-#prediction ocr
-def prediction_ocr(image):
-    str_pred = vietnamese_ocr.prediction_ocr(valid_img)
+# prediction ocr
+
+
+def prediction_ocr(img_model_input):
+    str_pred = vietnamese_ocr.prediction_ocr(img_model_input)
     print('Prediction:')
     print(str_pred)
     return str_pred
+
+
 # upload image
 # thay doi anh o day
-path = 'test_case_4.png'
-ori_img = process_image.load_original_img(path)
-image = process_image.process_image(path)
+def test_prediction(image_path):
 
+    ori_img = process_image.load_original_img(image_path)
+    image = process_image.process_image(image_path)
 
-#prediction with vietnamese_ocr train
-valid_img = process_image.convert_img_to_input(image)
-str_pred = vietnamese_ocr.prediction_ocr(valid_img)
+    # prediction with vietnamese_ocr train
+    valid_img = process_image.convert_img_to_input(image)
+    str_pred = vietnamese_ocr.prediction_ocr(valid_img)
 
-#prediction with vietocr
+    # prediction with vietocr
 
-#str_pred = vietocr_module.vietOCR_prediction(path)
+    # str_pred = vietocr_module.vietOCR_prediction(path)
 
-subf = plt.subplot(2, 1, 1)
+    subf = plt.subplot(2, 1, 1)
 
-plt.title('Ảnh gốc:')
-plt.imshow(ori_img)
+    plt.title('Ảnh gốc:')
+    plt.imshow(ori_img)
 
-subf = plt.subplot(2, 1, 2)
-plt.title('PID')
-plt.imshow(image, cmap='gray_r')
-plt.xlabel("Kết quả OCR : "+str_pred, color="red")
-plt.tight_layout()
-plt.show()
+    subf = plt.subplot(2, 1, 2)
+    plt.title('PID')
+    plt.imshow(image, cmap='gray_r')
+    plt.xlabel("Kết quả OCR : "+str_pred, color="red")
+    plt.tight_layout()
+    plt.show()
