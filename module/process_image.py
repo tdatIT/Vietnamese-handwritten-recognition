@@ -10,14 +10,14 @@ def process_image(img_file):
     img = np.pad(img, ((0,0),(0, 2167-width)), 'median')
     img = cv2.GaussianBlur(img, (5,5), 0)
     img = cv2.adaptiveThreshold(img, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY_INV, 11, 4)
-    img = np.expand_dims(img , axis = 2)
-    img = img/255.
     return img
 #Load original image
 def load_original_img(path):
     return cv2.imread(path)
 #convert image to np.array
 def convert_img_to_input(img_file):
+    img_file = img_file/255
+    img_file = np.expand_dims(img_file , axis = 2)
     valid_img = []
     valid_img.append(img_file)
     valid_img = np.array(valid_img)

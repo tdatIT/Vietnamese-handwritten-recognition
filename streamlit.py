@@ -50,7 +50,6 @@ with st.sidebar:
         if uploaded_file is not None:
             # Lấy file từ uploader chuyển về file mà openCV đọc được sau đó truyền vào hàm dip.process_image
             
-
             # process image and display
             #img_processed = dip.process_image(OPENCV_IMAGE)
             #processed_image_container.image(img_processed)
