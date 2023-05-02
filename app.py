@@ -21,25 +21,26 @@ def prediction_ocr(image):
     return str_pred
 # upload image
 # thay doi anh o day
-path = 'test_case_6.jpg'
+path = 'example12.jpg'
 ori_img = process_image.load_original_img(path)
 image = process_image.process_image(path)
+#image = process_image.erosion_dilation_image(image, 2, True)
+#image = process_image.erosion_dilation_image(image, 6, False)
 valid_img = process_image.convert_img_to_input(image)
 
 #prediction with vietnamese_ocr train
-#str_pred = vietnamese_ocr.prediction_ocr(valid_img)
+str_pred = vietnamese_ocr.prediction_ocr(valid_img)
 
 #prediction with vietocr
-str_pred = vietocr_module.vietOCR_prediction(path)
+#str_pred = vietocr_module.vietOCR_prediction(path)
 
 subf = plt.subplot(2, 1, 1)
-
 plt.title('Ảnh gốc:')
 plt.imshow(ori_img)
 
 subf = plt.subplot(2, 1, 2)
 plt.title('PID')
 plt.imshow(image, cmap='gray_r')
-plt.xlabel("Kết quả OCR : "+str_pred, color="red")
+plt.xlabel("Kết quả OCR: "+str_pred, color="red")
 plt.tight_layout()
 plt.show()
