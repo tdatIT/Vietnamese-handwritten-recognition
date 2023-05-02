@@ -1,0 +1,10 @@
+opencv
+tensorflow
+scikit-learn
+matplotlib
+editdistance
+#VietOCR
+vietocr
+PyYAML
+torch 
+torchvision     

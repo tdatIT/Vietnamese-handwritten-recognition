@@ -1,0 +1,8 @@
+#Dataset
+data/**
+#Data train
+vietnamese_hcr/raw/data/*
+#model
+model_checkpoint_weights.hdf5
+#cache file
+*__pycache__
