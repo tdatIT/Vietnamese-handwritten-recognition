@@ -1,0 +1,5 @@
+Download weight model in here
+
+transformerocr: https://drive.google.com/uc?id=13327Y1tz1ohsm5YZMyXVMPIOjoOA0OaA
+
+model_weights.hdf5: https://drive.google.com/file/d/1K0ZbwupgK9nbvX5eLRzqkHjbVToKxqES/view?usp=share_link
