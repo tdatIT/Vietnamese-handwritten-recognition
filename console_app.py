@@ -29,7 +29,7 @@ def prediction_ocr(img_model_input):
 def test_prediction(image_path):
 
     ori_img = process_image.load_original_img(image_path)
-    image = process_image.process_image(image_path)
+    image = process_image.process_image(ori_img)
 
     # prediction with vietnamese_ocr train
     valid_img = process_image.convert_img_to_input(image)
