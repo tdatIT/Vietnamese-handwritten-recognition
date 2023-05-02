@@ -3,6 +3,8 @@
 Thực hiện: 
 - Nguyễn Minh Cường 20110132
 - Trần Tiến Đạt - 20110457
+- Đỗ Thanh Hiếu - 19110202
+- Huỳnh Minh Thông - 1911037
 
 ### Công việc cần xử lý
 - Xây dựng model để dự đoán.
