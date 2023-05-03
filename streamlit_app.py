@@ -47,8 +47,6 @@ def main():
     st.markdown('<div style="margin-top:2rem"></div>', unsafe_allow_html=True)
     st.header("Kết quả")
     st.markdown('<div style="margin-top:1rem"></div>', unsafe_allow_html=True)
-    st.markdown(
-        '<style>.css-pxxe24 {visibility: hidden;}</style>', unsafe_allow_html=True)
 
     result_container = st.container()
 
@@ -76,6 +74,9 @@ def main():
 
         if st.sidebar.button("Reset"):
             if IMAGE_UPLOAD is not None:
+
+                st.session_state.MODEL_INPUT = None
+                st.session_state.OPENCV_IMAGE = None
                 # Lấy file từ uploader chuyển về file mà openCV đọc được sau đó truyền vào hàm dip.process_image
                 img_array = np.frombuffer(IMAGE_UPLOAD.read(), np.uint8)
                 st.session_state.OPENCV_IMAGE = cv2.imdecode(
@@ -83,6 +84,7 @@ def main():
                 # process image and display
                 st.session_state.MODEL_INPUT = dip.process_image(
                     st.session_state.OPENCV_IMAGE)
+
                 processed_image_container.image(
                     dip.process_image(st.session_state.OPENCV_IMAGE), caption='Ảnh đã xử lý')
             else:
