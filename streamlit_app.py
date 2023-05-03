@@ -110,7 +110,6 @@ def main():
                         rs_txt = st.text_input(
                             "Kết quả dự đoán", PREDICTION_STR)
                         if st.button("Copy and reset", type="secondary"):
-                            print(rs_txt)
                             pyperclip.copy("Chao em")
                 else:
                     message_container.error(
