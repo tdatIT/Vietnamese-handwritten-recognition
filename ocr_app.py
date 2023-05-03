@@ -16,7 +16,6 @@ import module.vietocr_module as vietocr_module
 
 # prediction ocr
 
-
 def prediction_ocr_crnn_ctc(img_model_input):
     str_pred = vietnamese_ocr.prediction_ocr(img_model_input)
     print('Prediction:')
