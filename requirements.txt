@@ -1,5 +1,6 @@
-opencv
-tensorflow
+streamlit==1.22.0
+opencv=4.6.0
+tensorflow==2.10.0
 scikit-learn
 matplotlib
 editdistance
@@ -8,3 +9,4 @@ vietocr
 PyYAML
 torch 
 torchvision     
+pyperclip

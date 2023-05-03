@@ -17,15 +17,22 @@ import module.vietocr_module as vietocr_module
 # prediction ocr
 
 
-def prediction_ocr(img_model_input):
+def prediction_ocr_crnn_ctc(img_model_input):
     str_pred = vietnamese_ocr.prediction_ocr(img_model_input)
     print('Prediction:')
     print(str_pred)
     return str_pred
 
 
+def prediction_ocr_vietocr(img_model_input):
+    str_pred = vietocr_module.vietOCR_prediction(img_model_input)
+    print('Prediction:')
+    print(str_pred)
+    return str_pred
 # upload image
 # thay doi anh o day
+
+
 def test_prediction(image_path):
 
     ori_img = process_image.load_original_img(image_path)

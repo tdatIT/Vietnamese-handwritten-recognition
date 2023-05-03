@@ -2,10 +2,11 @@ import streamlit as st
 import numpy as np
 import cv2
 from PIL import Image
+import pyperclip
 
 
 import module.process_image as dip
-import console_app as ocr
+import ocr_app as ocr
 
 
 def init_session_var():
@@ -23,7 +24,8 @@ def main():
     # init session state
     init_session_var()
 
-    st.set_page_config('Vietnamese Handwritten Recognition (OCR)', 'logo.ico')
+    st.set_page_config(
+        'Vietnamese Handwritten Recognition (OCR)', './img_streamlit/logo.ico')
     message_container = st.empty()
     st.title("Nhận dạng chữ viết tay Tiếng Việt")
     st.markdown('<div style="margin-top:2rem"></div>',
@@ -45,8 +47,10 @@ def main():
     st.markdown('<div style="margin-top:2rem"></div>', unsafe_allow_html=True)
     st.header("Kết quả")
     st.markdown('<div style="margin-top:1rem"></div>', unsafe_allow_html=True)
-    result_container = st.empty()
-    result_container.code("Kết quả dự đoán")
+    st.markdown(
+        '<style>.css-pxxe24 {visibility: hidden;}</style>', unsafe_allow_html=True)
+
+    result_container = st.container()
 
     # Sidebar
     with st.sidebar:
@@ -99,16 +103,30 @@ def main():
                     processed_image_container.image(
                         dip.process_image(st.session_state.OPENCV_IMAGE))
                     # Dự đoán chuỗi
-                    PREDICTION_STR = ocr.prediction_ocr(
+                    PREDICTION_STR = ocr.prediction_ocr_crnn_ctc(
                         dip.convert_img_to_input(st.session_state.MODEL_INPUT))
                     # Đưa chuổi dự đoán vào khung kết quả
-                    result_container.code(PREDICTION_STR)
+                    with result_container:
+                        rs_txt = st.text_input(
+                            "Kết quả dự đoán", PREDICTION_STR)
+                        if st.button("Copy and reset", type="secondary"):
+                            print(rs_txt)
+                            pyperclip.copy("Chao em")
                 else:
                     message_container.error(
                         'Vui lòng upload hoặc xử lý ảnh đầu vào')
             else:
-                message_container.warning(
-                    'Đang cập nhật em')
+                if IMAGE_UPLOAD is not None:
+                    image = Image.open(IMAGE_UPLOAD)
+                    PREDICTION_STR = ocr.prediction_ocr_vietocr(image)
+                    with result_container:
+                        rs_txt = st.text_input(
+                            "Kết quả dự đoán", PREDICTION_STR)
+                        if st.button("Copy and reset", type="secondary"):
+                            pyperclip.copy(rs_txt)
+                else:
+                    message_container.error(
+                        'Vui lòng upload hoặc xử lý ảnh đầu vào')
 
         st.title("Tên thành viên thực hiện")
         st.text("20110457 - Trần Tiến Đạt")
