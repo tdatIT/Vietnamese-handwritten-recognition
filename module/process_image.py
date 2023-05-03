@@ -33,6 +33,15 @@ def padding_image(image, width, height):
             new_img = cv2.copyMakeBorder(image, top, bottom, 0, 0, cv2.BORDER_CONSTANT, value=color)
     return new_img
 
+#Cropping images
+def crop_image(image, width, height):
+    h, w = image.shape[:2]
+    if(h > height and w > width):
+        startx = w // 2 - (width // 2)
+        starty = h // 2 - (height // 2)
+        return image[starty:starty + height, startx:startx + width]
+    else: return image
+
 #Erosion, Dilation images
 def erosion_dilation_image(image, kernel_size, isErosion):
     kernel = np.ones((kernel_size,kernel_size),np.uint8)
