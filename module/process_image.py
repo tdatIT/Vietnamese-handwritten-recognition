@@ -8,12 +8,14 @@ def process_image(cv2_img):
     img = cv2.cvtColor(cv2_img, cv2.COLOR_BGR2GRAY)
     height = 118
     width = 2122
-    img = cv2.resize(img, (int(118/height*width), 118))
-    img = np.pad(img, ((0, 0), (0, 2167-width)), 'median')
+    
     img = cv2.GaussianBlur(img, (5, 5), 0)
     img = np.expand_dims(img, axis=2)
     img = cv2.adaptiveThreshold(
         img, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY_INV, 11, 4)
+    padded_img = padding_image(img,width,height)
+    img = cv2.resize(padded_img, (int(118/height*width), 118))
+    img = np.pad(img, ((0, 0), (0, 2167-width)), 'median')
     img = img/255.
     return img
 
@@ -36,7 +38,7 @@ def convert_img_to_input(img_file):
 
 def padding_image(image, width, height):
     h, w = image.shape[:2]
-    color = [255, 255, 255]
+    color = [0, 0, 0]
     if (h < height and w < width):
         top, bottom = int((height - h)/2), int((height - h)/2)
         left, right = int((width - w)/2), int((width - w)/2)
@@ -53,9 +55,8 @@ def padding_image(image, width, height):
                 image, top, bottom, 0, 0, cv2.BORDER_CONSTANT, value=color)
     return new_img
 
+
 # Cropping images
-
-
 def crop_image(image, width, height):
     h, w = image.shape[:2]
     if (h > height and w > width):
