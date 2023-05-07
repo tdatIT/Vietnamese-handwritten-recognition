@@ -33,6 +33,14 @@ def init_session_var():
         st.session_state.RESIZE_ENABLE = None
 
 
+def reset():
+    st.session_state.IMG_DATA = None
+    st.session_state.MODEL_INPUT = None
+    st.session_state.PREDICTION_STR = None
+    st.session_state.RESIZE_ENABLE = False
+    st.experimental_rerun()
+
+
 def main():
     # init session state
     init_session_var()
@@ -47,7 +55,6 @@ def main():
                 ' Người dùng có thể thay đổi kích thước (resize) hoặc sử dụng phép co giãn (erosion/dilation) để tăng mức độ chính xác,' +
                 ' ngoài ra sau khi dự đoán người dùng có thể chỉnh sửa kết quả cho chính xác hơn.</p>', unsafe_allow_html=True)
 
-    
     st.markdown('<div style="margin-top:2rem"></div>', unsafe_allow_html=True)
 
     IMAGE_UPLOAD = st.file_uploader(
@@ -58,6 +65,7 @@ def main():
         if (st.session_state.RESIZE_ENABLE == True):
             if st.button("Hủy"):
                 st.session_state.RESIZE_ENABLE = False
+                st.experimental_rerun()
             img = Image.open(IMAGE_UPLOAD)
             cropped_img = st_cropper(img, realtime_update=True, box_color='#0000FF',
                                      aspect_ratio=None)
@@ -67,17 +75,25 @@ def main():
                                                          cv2.COLOR_RGB2BGR)
         else:
             if st.button("Resize"):
+                st.session_state.MODEL_INPUT = None
                 st.session_state.RESIZE_ENABLE = True
+                st.experimental_rerun()
 
     processed_image_container = st.empty()
-    processed_image_container.markdown(
-        '<div style="margin-top:2rem"></div>', unsafe_allow_html=True)
+    if st.session_state.MODEL_INPUT is None:
+        processed_image_container.markdown(
+            '<div style="margin-top:2rem"></div>', unsafe_allow_html=True)
+    else:
+        processed_image_container.image(
+            st.session_state.MODEL_INPUT, caption='Ảnh đã xử lý')
+
     st.markdown('<div style="margin-top:2rem"></div>', unsafe_allow_html=True)
     st.header("Kết quả")
     st.markdown('<div style="margin-top:1rem"></div>', unsafe_allow_html=True)
 
     if st.session_state.PREDICTION_STR is not None:
-        st.text("Click [Copy and reset] để sao chép và reset lại toàn bộ ứng dụng")
+        st.text(
+            "Click [Copy and reset] để sao chép và reset lại toàn bộ ứng dụng")
         st.session_state.PREDICTION_STR = st.text_input(
             "Kết quả dự đoán", st.session_state.PREDICTION_STR)
         if st.button("Copy and reset", type="secondary"):
@@ -109,24 +125,8 @@ def main():
                 message_container.error('Vui lòng upload ảnh cần xử lý')
 
         if st.sidebar.button("Reset"):
-            st.session_state.RESIZE_ENABLE = False
-            if IMAGE_UPLOAD is not None:
-
-                st.session_state.MODEL_INPUT = None
-
-                # Lấy file từ uploader chuyển về file mà openCV đọc được sau đó truyền vào hàm dip.process_image
-                img_array = np.frombuffer(IMAGE_UPLOAD.read(), np.uint8)
-                st.session_state.OPENCV_IMAGE = cv2.imdecode(
-                    img_array, cv2.IMREAD_COLOR)
-                # process image and display
-                st.session_state.MODEL_INPUT = dip.process_image(
-                    st.session_state.OPENCV_IMAGE)
-                processed_image_container.image(
-                    dip.process_image(st.session_state.OPENCV_IMAGE), caption='Ảnh đã xử lý')
-            else:
-                message_container.error('Vui lòng upload ảnh cần xử lý')
-
-        # Giá trị của slider 1
+            st.experimental_rerun()
+            # Giá trị của slider 1
         param1 = st.sidebar.slider(
             "Co đối tượng trong ảnh", 0, 8, 0, help="Tăng hoặc giảm kenel", key=1)
         if (st.session_state.MODEL_INPUT is not None
@@ -156,6 +156,7 @@ def main():
                     # Dự đoán chuỗi
                     st.session_state.PREDICTION_STR = ocr.prediction_ocr_crnn_ctc(
                         dip.convert_img_to_input(st.session_state.MODEL_INPUT))
+                    st.experimental_rerun()
                 else:
                     message_container.error(
                         'Vui lòng upload hoặc xử lý ảnh đầu vào')
@@ -164,6 +165,7 @@ def main():
                     image = Image.open(IMAGE_UPLOAD)
                     st.session_state.PREDICTION_STR = ocr.prediction_ocr_vietocr(
                         image)
+                    st.experimental_rerun()
                 else:
                     message_container.error(
                         'Vui lòng upload hoặc xử lý ảnh đầu vào')
