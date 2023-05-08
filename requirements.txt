@@ -1,10 +1,10 @@
-streamlit==1.22.0
-opencv-python
+streamlit
+#opencv-python
+opencv-python-headless
 tensorflow==2.10.0
 scikit-learn
 matplotlib
 editdistance
-#VietOCR
 vietocr
 PyYAML
 torch 
