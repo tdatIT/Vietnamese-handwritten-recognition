@@ -53,7 +53,7 @@ def main():
                 unsafe_allow_html=True)  # Insert a blank line
     st.markdown('<p style="text-align: justify; font-size:20px;">Hướng dẫn sử dụng: Upload ảnh cần nhận diện sau đó chọn xử lý ảnh đầu vào.' +
                 ' Người dùng có thể thay đổi kích thước (resize) hoặc sử dụng phép co giãn (erosion/dilation) để tăng mức độ chính xác,' +
-                ' ngoài ra sau khi dự đoán người dùng có thể chỉnh sửa kết quả cho chính xác hơn.</p>', unsafe_allow_html=True)
+                ' ngoài ra sau khi dự đoán người dùng có thể chỉnh sửa kết quả cho chính xác hơn.<a href="https://youtu.be/_PPOj0gDOkI">Hướng dẫn demo</a></p>', unsafe_allow_html=True)
 
     st.markdown('<div style="margin-top:2rem"></div>', unsafe_allow_html=True)
 
