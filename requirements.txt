@@ -9,5 +9,7 @@ editdistance
 vietocr
 PyYAML
 torch 
-torchvision     
+torchvision
+-f https://data.pyg.org/whl/torch-1.13.0+cpu.html
+torch-scatter
 pyperclip
