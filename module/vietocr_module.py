@@ -7,7 +7,7 @@ from vietocr.tool.config import Cfg
 
 def vietOCR_prediction(input):
     config = Cfg.load_config_from_name('vgg_transformer')
-    config['weights'] = './data/transformerocr.pth'
+    #config['weights'] = './data/transformerocr.pth'
     config['device'] = 'cpu'
     config['cnn']['pretrained'] = True
 
