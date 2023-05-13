@@ -46,6 +46,7 @@ def init_session_var():
 
 
 def reset():
+    st.session_state.OPENCV_IMAGE = None
     st.session_state.IMG_DATA = None
     st.session_state.MODEL_INPUT = None
     st.session_state.PREDICTION_STR = None
@@ -123,7 +124,7 @@ def main():
         st.text(
             "Click [Copy and reset] để sao chép và reset lại toàn bộ ứng dụng")
         st.session_state.PREDICTION_MUL = st.text_area(
-            "Kết quả dự đoán", value=st.session_state.PREDICTION_MUL,height=400)
+            "Kết quả dự đoán", value=st.session_state.PREDICTION_MUL, height=400)
         if st.button("Copy and reset", type="secondary", key=345):
             pyperclip.copy(st.session_state.PREDICTION_MUL)
             st.session_state.IMG_DATA = None
@@ -169,7 +170,8 @@ def main():
         if st.sidebar.button("Reset"):
             reset()
             st.experimental_rerun()
-            # Giá trị của slider 1
+
+         # Giá trị của slider 1
         param1 = st.sidebar.slider(
             "Co đối tượng trong ảnh", 0, 8, 0, help="Tăng hoặc giảm kenel", key=1)
         if (st.session_state.MODEL_INPUT is not None
@@ -188,15 +190,17 @@ def main():
             st.session_state.MODEL_INPUT = dip.erosion_dilation_image(st.session_state.MODEL_INPUT,
                                                                       param2, False)
             processed_image_container.image(st.session_state.MODEL_INPUT)
+
         option = st.selectbox('Chọn model để nhận diện',
                               ('CRNN + LTSM + CTC', 'AttentionOCR (VietOCR)'))
         if st.sidebar.button("Nhận diện văn bản", type="primary"):
             if (option == 'CRNN + LTSM + CTC'):
                 # Xử lý khi nút [Nhận diện văn bản] được nhấn
                 if st.session_state.MODEL_INPUT is not None:
-                    processed_image_container.image(
-                        st.session_state.SEGMENTS_IMG, caption='Ảnh đã xử lý')
+
                     if st.session_state.MULTILINE:
+                        processed_image_container.image(st.session_state.SEGMENTS_IMG,
+                                                        caption='Ảnh đã xử lý')
                         st.session_state.PREDICTION_MUL = ocr.prediction_multiline(st.session_state.MODEL_INPUT,
                                                                                    st.session_state.SIZE_PREDICT)
                     else:
