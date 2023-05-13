@@ -46,6 +46,7 @@ def convert_img_to_input(img_file):
 
 
 def padding_image(image, width, height):
+
     h, w = image.shape[:2]
     color = [0, 0, 0]
     if (h < height and w < width):
@@ -67,6 +68,7 @@ def padding_image(image, width, height):
 
 # Cropping images
 def crop_image(image, width, height):
+    
     h, w = image.shape[:2]
     if (h > height and w > width):
         startx = w // 2 - (width // 2)

@@ -123,7 +123,7 @@ def main():
         st.text(
             "Click [Copy and reset] để sao chép và reset lại toàn bộ ứng dụng")
         st.session_state.PREDICTION_MUL = st.text_area(
-            "Kết quả dự đoán", value=st.session_state.PREDICTION_MUL)
+            "Kết quả dự đoán", value=st.session_state.PREDICTION_MUL,height=400)
         if st.button("Copy and reset", type="secondary", key=345):
             pyperclip.copy(st.session_state.PREDICTION_MUL)
             st.session_state.IMG_DATA = None
