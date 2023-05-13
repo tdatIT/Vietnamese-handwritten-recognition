@@ -1,12 +1,15 @@
-streamlit==1.22.0
-opencv-python==4.6.0.66
+streamlit
+streamlit_cropper
+#opencv-python
+opencv-python-headless
 tensorflow==2.10.0
 scikit-learn
 matplotlib
 editdistance
-#VietOCR
 vietocr
 PyYAML
 torch 
-torchvision     
+torchvision
+-f https://data.pyg.org/whl/torch-1.13.0+cpu.html
+torch-scatter
 pyperclip
