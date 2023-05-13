@@ -44,3 +44,20 @@ def prediction_ocr(valid_img):
             if int(p) != -1:
                 pred += char_list[int(p)]
     return pred
+
+
+def prediction_ocr_multi(valid_img, SIZE):
+    prediction = crnn_model.model.predict(valid_img[OFFSET:OFFSET+SIZE])
+    prediction.shape
+    # decoder
+    out = K.get_value(K.ctc_decode(prediction, input_length=np.ones(prediction.shape[0])*prediction.shape[1],
+                                   greedy=True)[0][0])
+    all_predictions = []
+    i = 0
+    for x in out:
+        pred = ""
+        for p in x:
+            if int(p) != -1:
+                pred += char_list[int(p)]
+        all_predictions.append(pred)
+    return '\n'.join(all_predictions)

@@ -16,10 +16,17 @@ import module.vietocr_module as vietocr_module
 
 # prediction ocr
 
+
 def prediction_ocr_crnn_ctc(img_model_input):
     str_pred = vietnamese_ocr.prediction_ocr(img_model_input)
     print('Prediction:')
     print(str_pred)
+    return str_pred
+
+
+def prediction_multiline(img_model_input, size):
+    str_pred = vietnamese_ocr.prediction_ocr_multi(img_model_input, size)
+    print('Prediction: ',str_pred)
     return str_pred
 
 
