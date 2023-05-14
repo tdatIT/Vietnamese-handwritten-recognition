@@ -220,7 +220,7 @@ def main():
             processed_image_container.image(st.session_state.MODEL_INPUT)
 
         option = st.selectbox('Chọn model để nhận diện',
-                              ('CRNN + LTSM + CTC', 'AttentionOCR (VietOCR)'))
+                              ('CRNN + LTSM + CTC', 'TransformerOCR'))
         if st.sidebar.button("Nhận diện văn bản", type="primary"):
             if (option == 'CRNN + LTSM + CTC'):
                 # Xử lý khi nút [Nhận diện văn bản] được nhấn
@@ -251,8 +251,15 @@ def main():
             else:
                 if IMAGE_UPLOAD is not None:
                     if st.session_state.MULTILINE:
+                        with processed_image_container.container():
+                            st.image(
+                                st.session_state.SEGMENTS_IMG, caption='Ảnh đã xử lý')
+                            i = 0
+                            for img_prs in st.session_state.SEGMENTS_PRS:
+                                st.image(img_prs, 'Segments: {}'.format(i))
+                                i += 1
                         st.session_state.PREDICTION_MUL = ocr.prediction_ocr_vietocr_mul(
-                            st.session_state.SEGMENTS_IMG)
+                            st.session_state.SEGMENTS_ARR)
                     else:
                         image = Image.open(IMAGE_UPLOAD)
                         st.session_state.PREDICTION_STR = ocr.prediction_ocr_vietocr(

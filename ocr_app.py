@@ -39,16 +39,24 @@ def prediction_ocr_vietocr_mul(img_model_input):
         image_pil = Image.fromarray(image_rgb)
         str_pred = vietocr_module.vietOCR_prediction(image_pil)
         all_predictions.append(str_pred)
-    return '\n'.join(all_predictions)
+    pred = '\n'.join(all_predictions)
+    print("Prediction :{}".format(pred))
+    return pred
 
 
 def test_prediction_mul(image_path):
-
+    all_predictions = []
     ori_img = cv2.imread(image_path)
 
     # prediction with vietnamese_ocr train
     valid_img, arr = segments.segmentation_text_line(ori_img)
-    process_image.process_multi(arr)
+    for img in arr:
+        np_image = np.asarray(img)
+        image_rgb = cv2.cvtColor(np_image, cv2.COLOR_BGR2RGB)
+        image_pil = Image.fromarray(image_rgb)
+        str_pred = vietocr_module.vietOCR_prediction(image_pil)
+        all_predictions.append(str_pred)
+    print('\n'.join(all_predictions))
 
 
-test_prediction_mul('test_n1.jpg')
+# test_prediction_mul('test_n1.jpg')
