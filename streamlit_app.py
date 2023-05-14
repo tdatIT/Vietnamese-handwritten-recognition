@@ -50,13 +50,17 @@ def init_session_var():
 
 
 def reset():
-    st.session_state.OPENCV_IMAGE = None
-    st.session_state.IMG_DATA = None
+
+    st.session_state.MODEL_OPTION = None
     st.session_state.MODEL_INPUT = None
     st.session_state.PREDICTION_STR = None
-    st.session_state.RESIZE_ENABLE = False
-    st.session_state.SIZE_PREDICT = None
     st.session_state.PREDICTION_MUL = None
+    st.session_state.OPENCV_IMAGE = None
+    st.session_state.OLD_DIL = None
+    st.session_state.OLD_ERO = None
+    st.session_state.RESIZE_ENABLE = None
+    st.session_state.SIZE_PREDICT = None
+    st.session_state.MULTILINE = None
     st.session_state.SEGMENTS_IMG = None
     st.experimental_rerun()
 
@@ -137,6 +141,7 @@ def main():
             st.session_state.MODEL_INPUT = None
             st.session_state.SIZE_PREDICT = None
             st.session_state.PREDICTION_MUL = None
+            st.session_state.OPENCV_IMAGE = None
             st.experimental_rerun()
 
     # Sidebar
@@ -145,40 +150,34 @@ def main():
         st.title("Chức năng")
         st.session_state.MULTILINE = st.checkbox('Nhiều dòng văn bản')
 
-        if st.session_state.MULTILINE:
-            st.session_state.RESIZE_ENABLE = False
-
         if st.sidebar.button("Xử lý ảnh đầu vào", type="primary"):
             # Xử lý khi nút [Tự động xử lý ảnh] được nhấn
+
             if IMAGE_UPLOAD is not None:
-                # Resize
-                if (st.session_state.RESIZE_ENABLE is not None and st.session_state.RESIZE_ENABLE == True):
-                    st.session_state.MODEL_INPUT = dip.process_image(
-                        st.session_state.OPENCV_IMAGE)
-                    processed_image_container.image(dip.process_image(st.session_state.MODEL_INPUT),
-                                                    caption='Ảnh đã xử lý')
-                else:
-                    # get cv2 image from uploader
+
+                if st.session_state.RESIZE_ENABLE is None or st.session_state.RESIZE_ENABLE == False:
+
                     img_array = np.frombuffer(IMAGE_UPLOAD.read(), np.uint8)
                     st.session_state.OPENCV_IMAGE = cv2.imdecode(
                         img_array, cv2.IMREAD_COLOR)
 
-                    # segmentation if check multiline
-                    if (st.session_state.MULTILINE is not None and st.session_state.MULTILINE == True):
-                        st.session_state.SEGMENTS_IMG, segment_arr = SegmentImg.segmentation_text_line(
-                            st.session_state.OPENCV_IMAGE)
-                        # get model and size
-                        st.session_state.MODEL_INPUT, st.session_state.SIZE_PREDICT = dip.process_multi(
-                            segment_arr)
-                        # display
-                        processed_image_container.image(
-                            st.session_state.SEGMENTS_IMG, caption='Ảnh đã xử lý')
-                    # process_image if no option checked
-                    else:
-                        st.session_state.MODEL_INPUT = dip.process_image(
-                            st.session_state.OPENCV_IMAGE)
-                        processed_image_container.image(
-                            dip.process_image(st.session_state.MODEL_INPUT), caption='Ảnh đã xử lý')
+                # segmentation if check multiline
+                if (st.session_state.MULTILINE is not None and st.session_state.MULTILINE == True):
+                    st.session_state.SEGMENTS_IMG, segment_arr = SegmentImg.segmentation_text_line(
+                        st.session_state.OPENCV_IMAGE)
+                    # get model and size
+                    st.session_state.MODEL_INPUT, st.session_state.SIZE_PREDICT = dip.process_multi(
+                        segment_arr)
+                    # display
+                    processed_image_container.image(
+                        st.session_state.SEGMENTS_IMG, caption='Ảnh đã xử lý')
+                else:
+                    st.session_state.MODEL_INPUT = dip.process_image(
+                        st.session_state.OPENCV_IMAGE)
+                    processed_image_container.image(
+                        dip.process_image(st.session_state.OPENCV_IMAGE), caption='Ảnh đã xử lý')
+                # process_image if no option checked
+
             else:
                 message_container.error('Vui lòng upload ảnh cần xử lý')
 
@@ -188,7 +187,7 @@ def main():
 
          # Giá trị của slider 1
         param1 = st.sidebar.slider(
-            "Co đối tượng trong ảnh", 0, 8, 0, help="Tăng hoặc giảm kenel", key=1)
+            "Co đối tượng trong ảnh", 1, 8, 1, help="Tăng hoặc giảm kenel", key=1)
         if (st.session_state.MODEL_INPUT is not None
                 and st.session_state.OLD_ERO != param1 and st.session_state.MULTILINE == False):
             st.session_state.OLD_ERO = param1
@@ -198,7 +197,7 @@ def main():
 
         # Giá trị của slider 2
         param2 = st.sidebar.slider(
-            "Giãn đối tượng trong ảnh", 0, 8, 0, help="Tăng hoặc giảm kenel", key=2)
+            "Giãn đối tượng trong ảnh", 1, 8, 1, help="Tăng hoặc giảm kenel", key=2)
         if (st.session_state.MODEL_INPUT is not None
                 and st.session_state.OLD_DIL != param2 and st.session_state.MULTILINE == False):
             st.session_state.OLD_DIL = param2
