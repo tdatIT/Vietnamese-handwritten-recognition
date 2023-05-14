@@ -1,8 +1,9 @@
 # import our model, different layers and activation function
 import os
-from tensorflow.keras.layers import Dense, LSTM, Reshape, BatchNormalization, Input, Conv2D, MaxPool2D, Lambda, Bidirectional, Add, Activation
-from tensorflow.keras.models import Model
-import tensorflow.keras.backend as K
+from tensorflow import keras
+from keras.layers import Dense, LSTM, Reshape, BatchNormalization, Input, Conv2D, MaxPool2D, Lambda, Bidirectional, Add, Activation
+from keras.models import Model
+import keras.backend as K
 
 
 # Mô hình CRNN và LSTM nhận dạng ký tự

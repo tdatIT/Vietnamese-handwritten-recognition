@@ -1,9 +1,10 @@
-from tensorflow.keras.layers import Dense, LSTM, Reshape, BatchNormalization, Input, Conv2D, MaxPool2D, Lambda, Bidirectional, Add, Activation
-from tensorflow.keras.models import Model
-from tensorflow.keras.activations import relu, sigmoid, softmax
-import tensorflow.keras.backend as K
-from tensorflow.keras.utils import to_categorical
-from tensorflow.keras.callbacks import CSVLogger, TensorBoard, ModelCheckpoint, EarlyStopping, ReduceLROnPlateau
+from tensorflow import keras
+from keras.layers import Dense, LSTM, Reshape, BatchNormalization, Input, Conv2D, MaxPool2D, Lambda, Bidirectional, Add, Activation
+from keras.models import Model
+from keras.activations import relu, sigmoid, softmax
+import keras.backend as K
+from keras.utils import to_categorical
+from keras.callbacks import CSVLogger, TensorBoard, ModelCheckpoint, EarlyStopping, ReduceLROnPlateau
 
 import numpy as np
 

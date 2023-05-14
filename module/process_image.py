@@ -1,5 +1,6 @@
 import cv2
 import numpy as np
+from matplotlib import pyplot as plt
 
 # Read and process image
 
@@ -8,23 +9,48 @@ def process_multi(segments):
     size = 0
     valid_imgs = []
     for img in segments:
-        valid_imgs.append(process_image(img))
+        pre_img = process_image_mul(img)
+        valid_imgs.append(pre_img)
         size += 1
+        #plt.subplot(len(segments), 1, size)
+        #plt.imshow(pre_img, cmap="gray")
+    #plt.show()
     valid_imgs = np.array(valid_imgs)
     return valid_imgs, size
 
 
+def process_image_mul(cv2_img):
+    img = cv2.cvtColor(cv2_img, cv2.COLOR_BGR2GRAY)
+    height = 118
+    width = 2122
+    img = cv2.resize(img, (int(118/height*width), 118))
+    img = np.pad(img, ((0, 0), (0, 2167-width)), 'median')
+    # img = cv2.GaussianBlur(img, (5, 5), 0)
+    img = cv2.bilateralFilter(img, 9, 80, 80)
+    img = cv2.adaptiveThreshold(
+        img, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY_INV, 11, 4)
+
+    kernel = np.ones((1, 1), np.uint8)
+    img = cv2.dilate(img, kernel, iterations=1)
+
+    img = np.expand_dims(img, axis=2)
+    img = img/255.
+    return img
+
+
 def process_image(cv2_img):
+
     img = cv2.cvtColor(cv2_img, cv2.COLOR_BGR2GRAY)
     height = 118
     width = 2122
 
-    img = cv2.resize(img, (int(118/height*width), 118))
-    img = np.pad(img, ((0, 0), (0, 2167-width)), 'median')
     img = cv2.GaussianBlur(img, (5, 5), 0)
+    img = np.expand_dims(img, axis=2)
     img = cv2.adaptiveThreshold(
         img, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY_INV, 11, 4)
-    img = np.expand_dims(img, axis=2)
+    padded_img = padding_image(img, width, height)
+    img = cv2.resize(padded_img, (int(118/height*width), 118))
+    img = np.pad(img, ((0, 0), (0, 2167-width)), 'median')
     img = img/255.
     return img
 
@@ -68,7 +94,7 @@ def padding_image(image, width, height):
 
 # Cropping images
 def crop_image(image, width, height):
-    
+
     h, w = image.shape[:2]
     if (h > height and w > width):
         startx = w // 2 - (width // 2)
