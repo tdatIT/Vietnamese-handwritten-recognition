@@ -17,7 +17,7 @@ def segmentation_text_line(image):
     ero = cv2.erode(thresh, kernel, iterations=1)
 
     # dilation
-    kernel = np.ones((12, 150), np.uint8)
+    kernel = np.ones((5, 150), np.uint8)
     img_dilation = cv2.dilate(ero, kernel, iterations=1)
     # find contours
     ctrs, hier = cv2.findContours(
@@ -26,7 +26,7 @@ def segmentation_text_line(image):
     # sort contours
     sorted_ctrs = sorted(ctrs, key=lambda ctr: cv2.boundingRect(ctr)[1])
     min_width = 50  # giá trị ngưỡng chiều rộng tối thiểu
-    min_height = 50  # giá trị ngưỡng chiều cao tối thiểu
+    min_height = 10  # giá trị ngưỡng chiều cao tối thiểu
     for i, ctr in enumerate(sorted_ctrs):
         # Get bounding box
         x, y, w, h = cv2.boundingRect(ctr)
