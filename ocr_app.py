@@ -51,4 +51,4 @@ def test_prediction_mul(image_path):
     process_image.process_multi(arr)
 
 
-#test_prediction_mul('ocr.jpg')
+test_prediction_mul('test_n1.jpg')

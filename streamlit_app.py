@@ -45,6 +45,12 @@ def init_session_var():
     if 'SEGMENTS_IMG' not in st.session_state:
         st.session_state.SEGMENTS_IMG = None
 
+    if 'SEGMENTS_ARR' not in st.session_state:
+        st.session_state.SEGMENTS_ARR = None
+
+    if 'SEGMENTS_PRS' not in st.session_state:
+        st.session_state.SEGMENTS_PRS = None
+
     # st.session_state.OLD_ERO = 0
     # st.session_state.OLD_DIL = 0
 
@@ -62,6 +68,8 @@ def reset():
     st.session_state.SIZE_PREDICT = None
     st.session_state.MULTILINE = None
     st.session_state.SEGMENTS_IMG = None
+    st.session_state.SEGMENTS_ARR = None
+    st.session_state.SEGMENTS_PRS = None
     st.experimental_rerun()
 
 
@@ -163,14 +171,20 @@ def main():
 
                 # segmentation if check multiline
                 if (st.session_state.MULTILINE is not None and st.session_state.MULTILINE == True):
-                    st.session_state.SEGMENTS_IMG, segment_arr = SegmentImg.segmentation_text_line(
+                    st.session_state.SEGMENTS_IMG, st.session_state.SEGMENTS_ARR = SegmentImg.segmentation_text_line(
                         st.session_state.OPENCV_IMAGE)
                     # get model and size
-                    st.session_state.MODEL_INPUT, st.session_state.SIZE_PREDICT = dip.process_multi(
-                        segment_arr)
+                    st.session_state.MODEL_INPUT, st.session_state.SEGMENTS_PRS, st.session_state.SIZE_PREDICT = dip.process_multi(
+                        st.session_state.SEGMENTS_ARR)
                     # display
-                    processed_image_container.image(
-                        st.session_state.SEGMENTS_IMG, caption='Ảnh đã xử lý')
+                    with processed_image_container.container():
+                        st.image(
+                            st.session_state.SEGMENTS_IMG, caption='Ảnh đã xử lý')
+                        i = 0
+                        for img_prs in st.session_state.SEGMENTS_PRS:
+
+                            st.image(img_prs, 'Segments: {}'.format(i))
+                            i += 1
                 else:
                     st.session_state.MODEL_INPUT = dip.process_image(
                         st.session_state.OPENCV_IMAGE)
@@ -215,6 +229,13 @@ def main():
                     if st.session_state.MULTILINE:
                         processed_image_container.image(st.session_state.SEGMENTS_IMG,
                                                         caption='Ảnh đã xử lý')
+                        with processed_image_container.container():
+                            st.image(
+                                st.session_state.SEGMENTS_IMG, caption='Ảnh đã xử lý')
+                            i = 0
+                            for img_prs in st.session_state.SEGMENTS_PRS:
+                                st.image(img_prs, 'Segments: {}'.format(i))
+                                i += 1
                         st.session_state.PREDICTION_MUL = ocr.prediction_multiline(st.session_state.MODEL_INPUT,
                                                                                    st.session_state.SIZE_PREDICT)
                     else:

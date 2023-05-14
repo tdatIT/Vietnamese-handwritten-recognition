@@ -6,6 +6,7 @@ from matplotlib import pyplot as plt
 
 
 def process_multi(segments):
+    copy_valid = []
     size = 0
     valid_imgs = []
     for img in segments:
@@ -15,20 +16,22 @@ def process_multi(segments):
         # plt.subplot(len(segments), 1, size)
         # plt.imshow(pre_img, cmap="gray")
     # plt.show()
+    copy_valid = valid_imgs.copy()
     valid_imgs = np.array(valid_imgs)
-    return valid_imgs, size
+    return valid_imgs, copy_valid, size
 
 
 def process_image_mul(cv2_img):
     img = cv2.cvtColor(cv2_img, cv2.COLOR_BGR2GRAY)
     height = 118
-    width = 2122
-    img = cv2.resize(img, (int(118/height*width), 118))
-    img = np.pad(img, ((0, 0), (0, 2167-width)), 'median')
-    # img = cv2.GaussianBlur(img, (5, 5), 0)
+    width = 2167
     img = cv2.bilateralFilter(img, 9, 80, 80)
     img = cv2.adaptiveThreshold(
         img, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY_INV, 11, 4)
+    img_pad = padding_image(img, width, height)
+    img = cv2.resize(img_pad, (int(118/height*width), 118))
+    img = np.pad(img, ((0, 0), (0, 2167-width)), 'median')
+    # img = cv2.GaussianBlur(img, (5, 5), 0)
 
     kernel = np.ones((1, 1), np.uint8)
     img = cv2.dilate(img, kernel, iterations=1)
@@ -74,15 +77,15 @@ def padding_image(image, width, height):
     color = [0, 0, 0]
     if (h < height and w < width):
         top, bottom = int((height - h)/2), int((height - h)/2)
-        left, right = int((width - w)/2), int((width - w)/2)
+        left, right = 0, int((width - w)/2)
         new_img = cv2.copyMakeBorder(
             image, top, bottom, left, right, cv2.BORDER_CONSTANT, value=color)
     else:
         if (h > height):
-            left, right = int(((width*h)/height)/2), int(((width*h)/height)/2)
+            left, right = 0, int((width*h)/height)
             new_img = cv2.copyMakeBorder(
                 image, 0, 0, left, right, cv2.BORDER_CONSTANT, value=color)
-        else:
+        if (w > width):
             top, bottom = int(((height*w)/width)/2), int(((height*w)/width)/2)
             new_img = cv2.copyMakeBorder(
                 image, top, bottom, 0, 0, cv2.BORDER_CONSTANT, value=color)
